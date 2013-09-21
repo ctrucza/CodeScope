@@ -8,6 +8,7 @@ namespace codescope
     {
         private readonly string root;
         private readonly string solution;
+        private readonly string project;
 
         private readonly CommandLine commandLine;
         private readonly NameValueCollection configuration;
@@ -19,11 +20,24 @@ namespace codescope
 
             root = ReadConfigurationFor("root", Directory.GetCurrentDirectory());
             solution = ReadConfigurationFor("solution", "");
+            project = ReadConfigurationFor("project", "");
         }
 
         public string SolutionFileName()
         {
-            string solutionFileName = Path.Combine(root, solution);
+            return GetFullFileName(solution);
+        }
+
+        public string ProjectFileName()
+        {
+            return GetFullFileName(project);
+        }
+
+        private string GetFullFileName(string relativeFileName)
+        {
+            if (string.IsNullOrEmpty(relativeFileName))
+                return "";
+            string solutionFileName = Path.Combine(root, relativeFileName);
             return Path.GetFullPath(solutionFileName);
         }
 
@@ -34,10 +48,10 @@ namespace codescope
 
             string result = valueFromConfigFile;
 
-            if (valueFromCommandLine != "")
+            if (!string.IsNullOrEmpty(valueFromCommandLine))
                 result = valueFromCommandLine;
             
-            if (result == "")
+            if (string.IsNullOrEmpty(result))
                 result = defaultValue;
             
             return result;
