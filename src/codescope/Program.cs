@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Configuration;
-using System.IO;
 using System.Linq;
 using Roslyn.Compilers.Common;
 using Roslyn.Compilers.CSharp;
@@ -12,14 +11,27 @@ namespace codescope
     {
         static void Main(string[] args)
         {
-            string rootFolder = Directory.GetCurrentDirectory();
-            string testFolder = ConfigurationManager.AppSettings["sourceFolder"];
-            testFolder = Path.Combine(rootFolder, testFolder);
-            string solutionFolder = Path.Combine(testFolder, "helloworld");
-            string solutionName = "helloworld.sln";
-            string solutionFileName = Path.Combine(solutionFolder, solutionName);
+            CodeScopeConfiguration configuration = new CodeScopeConfiguration(args, ConfigurationManager.AppSettings);
 
-            ISolution solution = Solution.Load(solutionFileName);
+            string solutionFileName = configuration.SolutionFileName();
+            string projectFileName = configuration.ProjectFileName();
+
+            IWorkspace workspace;
+            if (!string.IsNullOrEmpty(solutionFileName))
+            {
+                workspace = Workspace.LoadSolution(solutionFileName);
+            }
+            else if (!string.IsNullOrEmpty(projectFileName))
+            {
+                workspace = Workspace.LoadStandAloneProject(projectFileName);
+            }
+            else
+            {
+                Console.WriteLine("A project or solution was not specified");
+                return;
+            }
+
+            ISolution solution = workspace.CurrentSolution;
 
             foreach (IProject project in solution.Projects)
             {
