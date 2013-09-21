@@ -33,10 +33,16 @@ namespace codescope
 
             ISolution solution = workspace.CurrentSolution;
 
+            int projectCount = 0;
+            int fileCount = 0;
+            int classCount = 0;
+
             foreach (IProject project in solution.Projects)
             {
+                projectCount++;
                 foreach (IDocument document in project.Documents)
                 {
+                    fileCount++;
                     CommonSyntaxTree tree= document.GetSyntaxTree();
                     CommonSyntaxNode node = tree.GetRoot();
 
@@ -47,15 +53,22 @@ namespace codescope
                     // InterfaceDeclarationSyntax
                     // EnumDeclarationSyntax
                         
-                    var types = node.DescendantNodes().OfType<BaseTypeDeclarationSyntax>();
+                    var types = node.DescendantNodes().OfType<ClassDeclarationSyntax>();
                     foreach (var type in types)
                     {
+                        classCount++;
                         //Console.WriteLine(classDeclaration.Modifiers);
                         //Console.WriteLine(classDeclaration.Keyword);
-                        Console.WriteLine(type.Identifier);
+                        //Console.WriteLine(type.Identifier);
                     }
                 }
             }
+
+            Console.WriteLine();
+            Console.WriteLine("Summary:");
+            Console.WriteLine("Projects: {0}", projectCount);
+            Console.WriteLine("Files: {0}", fileCount);
+            Console.WriteLine("Classes: {0}", classCount);
         }
     }
 }
