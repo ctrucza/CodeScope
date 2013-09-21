@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.20827.3
-MinimumVisualStudioVersion = 10.0.40219.1
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "codescope", "codescope\codescope.csproj", "{CCED705F-B7EC-485A-AFFE-CDE1FC27D4E9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "codescope.Tests", "codescope.Tests\codescope.Tests.csproj", "{038503BC-27B1-4B4A-9227-3EC3C93B8A83}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +15,10 @@ Global
 		{CCED705F-B7EC-485A-AFFE-CDE1FC27D4E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CCED705F-B7EC-485A-AFFE-CDE1FC27D4E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CCED705F-B7EC-485A-AFFE-CDE1FC27D4E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{038503BC-27B1-4B4A-9227-3EC3C93B8A83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{038503BC-27B1-4B4A-9227-3EC3C93B8A83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{038503BC-27B1-4B4A-9227-3EC3C93B8A83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{038503BC-27B1-4B4A-9227-3EC3C93B8A83}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
