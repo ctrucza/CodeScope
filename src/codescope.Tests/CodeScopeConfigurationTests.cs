@@ -28,7 +28,7 @@ namespace codescope.Tests
             ConfigurationManager.AppSettings["solution"] = "A.sln";
             string[] args = new[]
                 {
-                    "-root", @"c:\someOtherPath",
+                    "-root", @"c:\someOtherPath"
                 };
 
             CodeScopeConfiguration config = CreateConfig(args);
