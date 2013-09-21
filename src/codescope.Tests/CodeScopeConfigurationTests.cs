@@ -95,7 +95,7 @@ namespace codescope.Tests
         }
 
         [Test]
-        public void Configuraion_SolutionSetAsParameter_SetsSolutionFile()
+        public void Configuration_SolutionSetAsParameter_SetsSolutionFile()
         {
             ConfigurationManager.AppSettings["solution"] = "";
             string[] args = new string[]
