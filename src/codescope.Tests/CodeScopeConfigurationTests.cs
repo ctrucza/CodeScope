@@ -95,6 +95,22 @@ namespace codescope.Tests
         }
 
         [Test]
+        public void Configuraion_SolutionSetAsParameter_SetsSolutionFile()
+        {
+            ConfigurationManager.AppSettings["solution"] = "";
+            string[] args = new string[]
+                {
+                    "someSolution.sln"
+                };
+
+            CodeScopeConfiguration config = CreateConfig(args);
+
+            string expected = Path.Combine(currentFolder, "someSolution.sln");
+            Assert.AreEqual(expected, config.SolutionFileName());
+        }
+
+
+        [Test]
         public void Configuration_ProjectSetInConfigFile_SetsProjectFileCorrectly()
         {
             ConfigurationManager.AppSettings["root"] = @"c:\somePath";

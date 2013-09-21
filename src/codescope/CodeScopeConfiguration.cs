@@ -1,5 +1,6 @@
 ﻿using System.Collections.Specialized;
 using System.IO;
+using System.Linq;
 
 namespace codescope
 {
@@ -11,6 +12,8 @@ namespace codescope
 
         private readonly CommandLine commandLine;
         private readonly NameValueCollection configuration;
+        private const string SolutionExtension = ".sln";
+        private const string ProjectExtension = ".csproj";
 
         public CodeScopeConfiguration(string[] args, NameValueCollection configuration)
         {
@@ -20,6 +23,12 @@ namespace codescope
             root = ReadConfigurationFor("root", Directory.GetCurrentDirectory());
             solution = ReadConfigurationFor("solution", "");
             project = ReadConfigurationFor("project", "");
+
+            if (string.IsNullOrEmpty(solution))
+                solution = ReadFileFromParameters(SolutionExtension);
+
+            if (string.IsNullOrEmpty(project))
+                project = ReadFileFromParameters(ProjectExtension);
         }
 
         public string SolutionFileName()
@@ -64,6 +73,27 @@ namespace codescope
         private string GetValueFromCommandLine(string name)
         {
             return commandLine.Option(name);
+        }
+
+        private string ReadFileFromParameters(string extension)
+        {
+            string parameter = GetFirstParameter();
+            if (!IsFileOfType(parameter, extension))
+                return "";
+            return parameter;
+        }
+
+        private string GetFirstParameter()
+        {
+            if (commandLine.Parameters().Any())
+                return commandLine.Parameters().First();
+            
+            return "";
+        }
+
+        private bool IsFileOfType(string parameter, string extension)
+        {
+            return Path.GetExtension(parameter) == extension;
         }
     }
 }
