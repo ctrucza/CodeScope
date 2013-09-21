@@ -18,6 +18,27 @@ namespace codescope
             Parse();
         }
 
+        public IEnumerable<string> Parameters()
+        {
+            return parameters;
+        }
+
+        public bool IsOn(string switchName)
+        {
+            return switches.Contains(GetOptionName(switchName));
+        }
+
+        public string Option(string optionName)
+        {
+            string key = GetOptionName(optionName);
+            return options.ContainsKey(key) ? options[key] : "";
+        }
+
+        private static string GetOptionName(string name)
+        {
+            return "-" + name;
+        }
+
         private void Parse()
         {
             index = 0;
@@ -83,27 +104,6 @@ namespace codescope
             string result = args[index];
             index++;
             return result;
-        }
-
-        public IEnumerable<string> GetParameters()
-        {
-            return parameters;
-        }
-
-        public bool GetSwitch(string switchName)
-        {
-            return switches.Contains(GetOptionName(switchName));
-        }
-
-        private static string GetOptionName(string name)
-        {
-            return "-" + name;
-        }
-
-        public string GetOption(string optionName)
-        {
-            string key = GetOptionName(optionName);
-            return options.ContainsKey(key) ? options[key] : "";
         }
     }
 }

@@ -10,45 +10,45 @@ namespace codescope.Tests
         public void CommandLine_WithOneParameter_HasOneParameter()
         {
             CommandLine cmd = new CommandLine(new []{"parameter"});
-            CollectionAssert.Contains(cmd.GetParameters(), "parameter");
+            CollectionAssert.Contains(cmd.Parameters(), "parameter");
         }
 
         [Test]
         public void CommandLine_WithTwoParameters_HasTwoParameters()
         {
             CommandLine cmd = new CommandLine(new []{"firstParameter", "secondParameter"});
-            Assert.AreEqual(2, cmd.GetParameters().Count());
-            CollectionAssert.Contains(cmd.GetParameters(), "firstParameter");
-            CollectionAssert.Contains(cmd.GetParameters(), "secondParameter");
+            Assert.AreEqual(2, cmd.Parameters().Count());
+            CollectionAssert.Contains(cmd.Parameters(), "firstParameter");
+            CollectionAssert.Contains(cmd.Parameters(), "secondParameter");
         }
 
         [Test]
         public void CommandLine_WithOneSwitch_HasNoParameters()
         {
             CommandLine cmd = new CommandLine(new []{"-a"});
-            Assert.AreEqual(0, cmd.GetParameters().Count());
+            Assert.AreEqual(0, cmd.Parameters().Count());
         }
 
         [Test]
         public void CommandLine_WithOneSwitch_HasTheSwitchOn()
         {
             CommandLine cmd = new CommandLine(new[]{"-a"});
-            Assert.IsTrue(cmd.GetSwitch("a"));
+            Assert.IsTrue(cmd.IsOn("a"));
         }
 
         [Test]
         public void CommandLine_WithoutASwitch_HasTheSwitchOff()
         {
             CommandLine cmd = new CommandLine(new string[]{});
-            Assert.IsFalse(cmd.GetSwitch("a"));
+            Assert.IsFalse(cmd.IsOn("a"));
         }
 
         [Test]
         public void CommandLine_WithTwoSwitches_HasBothSwitchedOn()
         {
             CommandLine cmd = new CommandLine(new []{"-a", "-b"});
-            Assert.IsTrue(cmd.GetSwitch("a"));
-            Assert.IsTrue(cmd.GetSwitch("b"));
+            Assert.IsTrue(cmd.IsOn("a"));
+            Assert.IsTrue(cmd.IsOn("b"));
         }
 
 
@@ -56,21 +56,21 @@ namespace codescope.Tests
         public void CommandLine_WithOneOption_HasTheOptionSet()
         {
             CommandLine cmd = new CommandLine(new []{"-option", "value"});
-            Assert.AreEqual("value", cmd.GetOption("option"));
+            Assert.AreEqual("value", cmd.Option("option"));
         }
 
         [Test]
         public void CommandLine_WithNoOptions_HasTheOptionEmpty()
         {
             CommandLine cmd = new CommandLine(new string[]{});
-            Assert.AreEqual("", cmd.GetOption("option"));
+            Assert.AreEqual("", cmd.Option("option"));
         }
 
         [Test]
         public void CommandLine_WithAnOption_ConsumesTheOption()
         {
             CommandLine cmd = new CommandLine(new []{"-option", "value"});
-            CollectionAssert.DoesNotContain(cmd.GetParameters(), "value");
+            CollectionAssert.DoesNotContain(cmd.Parameters(), "value");
         }
     }
 }
