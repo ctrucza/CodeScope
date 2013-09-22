@@ -70,6 +70,7 @@
     <Compile Include="EnumCollector.cs" />
     <Compile Include="GenericCollector.cs" />
     <Compile Include="InterfaceCollector.cs" />
+    <Compile Include="MethodCollector.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ProjectStatistics.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

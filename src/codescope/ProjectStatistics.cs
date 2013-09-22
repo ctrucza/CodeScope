@@ -7,16 +7,11 @@ namespace codescope
     class ProjectStatistics
     {
         private readonly IProject project;
-        private List<SyntaxWalker> walkers = new List<SyntaxWalker>();
+        private readonly List<CommonCollector> collectors = new List<CommonCollector>();
 
         public ProjectStatistics(IProject project)
         {
             this.project = project;
-        }
-
-        public void AddWalker(SyntaxWalker walker)
-        {
-            walkers.Add(walker);
         }
 
         public void CollectStatistics()
@@ -30,16 +25,16 @@ namespace codescope
                 SyntaxTree tree = SyntaxTree.ParseFile(document.FilePath);
                 SyntaxNode root = tree.GetRoot();
 
-                foreach (SyntaxWalker walker in walkers)
+                foreach (CommonCollector collector in collectors)
                 {
-                    walker.Visit(root);
+                    collector.Visit(root);
                 }
             }
         }
 
-        public void AddWalkers(IEnumerable<CommonCollector> walkerList)
+        public void AddCollectors(IEnumerable<CommonCollector> collectorList)
         {
-            walkers.AddRange(walkerList);
+            collectors.AddRange(collectorList);
         }
     }
 }

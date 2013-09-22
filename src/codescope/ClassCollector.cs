@@ -1,5 +1,4 @@
-﻿using System;
-using Roslyn.Compilers.CSharp;
+﻿using Roslyn.Compilers.CSharp;
 
 namespace codescope
 {
@@ -7,8 +6,9 @@ namespace codescope
     {
         public override void VisitClassDeclaration(ClassDeclarationSyntax node)
         {
-            Console.WriteLine("Class collector visits node {0}", node);
             Nodes.Add(node);
+            //MethodCollector c = new MethodCollector();
+            //c.Visit(node);
         }
     }
 }
