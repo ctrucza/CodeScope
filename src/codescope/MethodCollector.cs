@@ -1,5 +1,4 @@
-﻿using Roslyn.Compilers;
-using Roslyn.Compilers.CSharp;
+﻿using Roslyn.Compilers.CSharp;
 
 namespace codescope
 {
