@@ -1,4 +1,5 @@
-﻿using Roslyn.Compilers.CSharp;
+﻿using System.Collections.Generic;
+using Roslyn.Compilers.CSharp;
 using Roslyn.Services;
 
 namespace codescope
@@ -6,12 +7,16 @@ namespace codescope
     class ProjectStatistics
     {
         private readonly IProject project;
-        private readonly ClassCollector classCollector;
+        private List<SyntaxWalker> walkers = new List<SyntaxWalker>();
 
         public ProjectStatistics(IProject project)
         {
             this.project = project;
-            classCollector = new ClassCollector();
+        }
+
+        public void AddWalker(SyntaxWalker walker)
+        {
+            walkers.Add(walker);
         }
 
         public void CollectStatistics()
@@ -25,13 +30,16 @@ namespace codescope
                 SyntaxTree tree = SyntaxTree.ParseFile(document.FilePath);
                 SyntaxNode root = tree.GetRoot();
 
-                classCollector.Visit(root);
+                foreach (SyntaxWalker walker in walkers)
+                {
+                    walker.Visit(root);
+                }
             }
         }
 
-        public int ClassCount()
+        public void AddWalkers(IEnumerable<CommonCollector> walkerList)
         {
-            return classCollector.Classes.Count;
+            walkers.AddRange(walkerList);
         }
     }
 }
