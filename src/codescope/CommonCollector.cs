@@ -29,8 +29,11 @@ namespace codescope
             IEnumerable<SyntaxNode> syntaxNodes = Nodes.Where(node => node.GetText().LineCount == maxLoc);
             foreach (SyntaxNode syntaxNode in syntaxNodes)
             {
-                sb.Append(syntaxNode.GetText());
-                sb.AppendLine();
+                if (syntaxNode is BaseTypeDeclarationSyntax)
+                {
+                    sb.Append((syntaxNode as BaseTypeDeclarationSyntax).Identifier);
+                    sb.AppendLine();                    
+                }
             }
 
             return sb.ToString();

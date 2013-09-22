@@ -52,7 +52,7 @@ namespace codescope
             {
                 string name = collector.Key;
                 Console.WriteLine("{0}", name);
-                Console.WriteLine(collector);
+                Console.WriteLine(collector.Value);
 
             }
 
