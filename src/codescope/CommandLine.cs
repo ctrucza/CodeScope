@@ -68,15 +68,15 @@ namespace codescope
             options[name] = value;
         }
 
+        private static bool IsParameter(string name)
+        {
+            return !IsOption(name);
+        }
+
         private bool IsSwitch()
         {
             string next = PeekNext();
             return (NoMoreArguments() || IsOption(next));
-        }
-
-        private static bool IsParameter(string name)
-        {
-            return !IsOption(name);
         }
 
         private static bool IsOption(string name)
