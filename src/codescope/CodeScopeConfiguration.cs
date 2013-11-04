@@ -6,7 +6,6 @@ namespace codescope
 {
     public class CodeScopeConfiguration
     {
-        private readonly string root;
         private readonly string solution;
         private readonly string project;
 
@@ -20,7 +19,6 @@ namespace codescope
             commandLine = new CommandLine(args);
             this.configuration = configuration;
 
-            root = ReadConfigurationFor("root", Directory.GetCurrentDirectory());
             solution = ReadConfigurationFor("solution", "");
             project = ReadConfigurationFor("project", "");
 
@@ -45,7 +43,7 @@ namespace codescope
         {
             if (string.IsNullOrEmpty(relativeFileName))
                 return "";
-            string solutionFileName = Path.Combine(root, relativeFileName);
+            string solutionFileName = Path.Combine(Directory.GetCurrentDirectory(), relativeFileName);
             return Path.GetFullPath(solutionFileName);
         }
 

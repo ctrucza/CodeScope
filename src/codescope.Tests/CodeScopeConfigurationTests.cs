@@ -11,70 +11,19 @@ namespace codescope.Tests
         private readonly string currentFolder = Directory.GetCurrentDirectory();
 
         [Test]
-        public void Configuration_RootSetInConfigFile_ReadsRootFromConfigFile()
-        {
-            ConfigurationManager.AppSettings["root"] = @"c:\somePath";
-            ConfigurationManager.AppSettings["solution"] = "A.sln";
-
-            CodeScopeConfiguration config = CreateConfig(emptyArgs);
-            
-            Assert.AreEqual(@"c:\somePath\A.sln", config.SolutionFileName());
-        }
-
-        [Test]
-        public void Configuration_RootSetInCommandLine_OverridesConfiguration()
-        {
-            ConfigurationManager.AppSettings["root"] = @"c:\somePath";
-            ConfigurationManager.AppSettings["solution"] = "A.sln";
-            string[] args = new[]
-                {
-                    "-root", @"c:\someOtherPath"
-                };
-
-            CodeScopeConfiguration config = CreateConfig(args);
-
-            Assert.AreEqual(@"c:\someOtherPath\A.sln", config.SolutionFileName());
-        }
-
-        [Test]
-        public void Configuration_RootNotSet_SetsRootToCurrentFolder()
-        {
-            ConfigurationManager.AppSettings["root"] = "";
-            ConfigurationManager.AppSettings["solution"] = "A.sln";
-
-            CodeScopeConfiguration config = CreateConfig(emptyArgs);
-
-            string expected = Path.Combine(currentFolder, "A.sln");
-            Assert.AreEqual(expected, config.SolutionFileName());
-        }
-
-        [Test]
-        public void Configuration_RootSetToRelativeFolder_ConvertsSolutionFileNameToAbsolute()
-        {
-            ConfigurationManager.AppSettings["root"] = "solutions";
-            ConfigurationManager.AppSettings["solution"] = "A.sln";
-
-            CodeScopeConfiguration config = CreateConfig(emptyArgs);
-
-            string expected = Path.Combine(currentFolder, @"solutions\A.sln");
-            Assert.AreEqual(expected, config.SolutionFileName());
-        }
-
-        [Test]
         public void Configuration_SolutionSetInConfigFile_SetsSolutionFileCorrectly()
         {
-            ConfigurationManager.AppSettings["root"] = @"c:\somePath";
             ConfigurationManager.AppSettings["solution"] = "B.sln";
 
             CodeScopeConfiguration config = CreateConfig(emptyArgs);
 
-            Assert.AreEqual(@"c:\somePath\B.sln", config.SolutionFileName());
+            string expected = Path.Combine(Directory.GetCurrentDirectory(), "B.sln");
+            Assert.AreEqual(expected, config.SolutionFileName());
         }
 
         [Test]
         public void Configuration_SolutionSetInCommandLine_OverridesConfiguration()
         {
-            ConfigurationManager.AppSettings["root"] = @"c:\somePath";
             ConfigurationManager.AppSettings["solution"] = "A.sln";
             string[] args = new []
                 {
@@ -83,23 +32,14 @@ namespace codescope.Tests
 
             CodeScopeConfiguration config = CreateConfig(args);
 
-            Assert.AreEqual(@"c:\somePath\B.sln", config.SolutionFileName());
-        }
-
-        [Test]
-        public void Configuration_SolutionNotSet_ReturnsEmptySolutionFileName()
-        {
-            ConfigurationManager.AppSettings["solution"] = "";
-            CodeScopeConfiguration config = CreateConfig(emptyArgs);
-            Assert.AreEqual("", config.SolutionFileName());
+            string expected = Path.Combine(Directory.GetCurrentDirectory(), "B.sln");
+            Assert.AreEqual(expected, config.SolutionFileName());
         }
 
         [Test]
         public void Configuration_SolutionSetAsParameter_SetsSolutionFile()
         {
-            ConfigurationManager.AppSettings["root"] = "";
-            ConfigurationManager.AppSettings["solution"] = "";
-            string[] args = new string[]
+            string[] args = new[]
                 {
                     "someSolution.sln"
                 };
@@ -110,22 +50,27 @@ namespace codescope.Tests
             Assert.AreEqual(expected, config.SolutionFileName());
         }
 
+        [Test]
+        public void Configuration_SolutionNotSet_ReturnsEmptySolutionFileName()
+        {
+            CodeScopeConfiguration config = CreateConfig(emptyArgs);
+            Assert.AreEqual("", config.SolutionFileName());
+        }
 
         [Test]
         public void Configuration_ProjectSetInConfigFile_SetsProjectFileCorrectly()
         {
-            ConfigurationManager.AppSettings["root"] = @"c:\somePath";
             ConfigurationManager.AppSettings["project"] = "someProject";
 
             CodeScopeConfiguration config = CreateConfig(emptyArgs);
 
-            Assert.AreEqual(@"c:\somePath\someProject", config.ProjectFileName());
+            string expected = Path.Combine(currentFolder, "someProject");
+            Assert.AreEqual(expected, config.ProjectFileName());
         }
 
         [Test]
         public void Configuration_ProjectSetInCommandLine_SetsProjectFileCorrectly()
         {
-            ConfigurationManager.AppSettings["root"] = @"c:\somePath";
             string[] args = new []
                 {
                     "-project", "aProject"
@@ -133,13 +78,13 @@ namespace codescope.Tests
 
             CodeScopeConfiguration config = CreateConfig(args);
 
-            Assert.AreEqual(@"c:\somePath\aProject", config.ProjectFileName());
+            string expected = Path.Combine(Directory.GetCurrentDirectory(), "aProject");
+            Assert.AreEqual(expected, config.ProjectFileName());
         }
 
         [Test]
         public void Configuration_ProjectSetInCommandLine_OverridesConfiguration()
         {
-            ConfigurationManager.AppSettings["root"] = @"c:\somePath";
             ConfigurationManager.AppSettings["project"] = "someProject";
 
             string[] args = new[]
@@ -149,7 +94,8 @@ namespace codescope.Tests
 
             CodeScopeConfiguration config = CreateConfig(args);
 
-            Assert.AreEqual(@"c:\somePath\aProject", config.ProjectFileName());
+            string expected = Path.Combine(Directory.GetCurrentDirectory(), "aProject");
+            Assert.AreEqual(expected, config.ProjectFileName());
         }
 
         [Test]
