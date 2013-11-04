@@ -1,5 +1,4 @@
-﻿using System.Collections.Specialized;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 
 namespace codescope
@@ -10,23 +9,21 @@ namespace codescope
         private readonly string project;
 
         private readonly CommandLine commandLine;
-        private readonly NameValueCollection configuration;
         private const string SolutionExtension = ".sln";
         private const string ProjectExtension = ".csproj";
 
-        public CodeScopeConfiguration(string[] args, NameValueCollection configuration)
+        public CodeScopeConfiguration(string[] args)
         {
             commandLine = new CommandLine(args);
-            this.configuration = configuration;
 
             solution = ReadConfigurationFor("solution", "");
             project = ReadConfigurationFor("project", "");
 
             if (string.IsNullOrEmpty(solution))
-                solution = ReadFileFromParameters(SolutionExtension);
+                solution = ReadFilePassedAsParameter(SolutionExtension);
 
             if (string.IsNullOrEmpty(project))
-                project = ReadFileFromParameters(ProjectExtension);
+                project = ReadFilePassedAsParameter(ProjectExtension);
         }
 
         public string SolutionFileName()
@@ -49,23 +46,12 @@ namespace codescope
 
         private string ReadConfigurationFor(string name, string defaultValue)
         {
-            string valueFromConfigFile = GetValueFromConfigFile(name);
-            string valueFromCommandLine = GetValueFromCommandLine(name);
+            string result = GetValueFromCommandLine(name);
 
-            string result = valueFromConfigFile;
-
-            if (!string.IsNullOrEmpty(valueFromCommandLine))
-                result = valueFromCommandLine;
-            
             if (string.IsNullOrEmpty(result))
                 result = defaultValue;
             
             return result;
-        }
-
-        private string GetValueFromConfigFile(string name)
-        {
-            return configuration[name];
         }
 
         private string GetValueFromCommandLine(string name)
@@ -73,7 +59,7 @@ namespace codescope
             return commandLine.Option(name);
         }
 
-        private string ReadFileFromParameters(string extension)
+        private string ReadFilePassedAsParameter(string extension)
         {
             string parameter = GetFirstParameter();
             if (!IsFileOfType(parameter, extension))

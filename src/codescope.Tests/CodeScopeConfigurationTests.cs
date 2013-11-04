@@ -1,5 +1,4 @@
-﻿using System.Configuration;
-using System.IO;
+﻿using System.IO;
 using NUnit.Framework;
 
 namespace codescope.Tests
@@ -11,28 +10,16 @@ namespace codescope.Tests
         private readonly string currentFolder = Directory.GetCurrentDirectory();
 
         [Test]
-        public void Configuration_SolutionSetInConfigFile_SetsSolutionFileCorrectly()
+        public void Configuration_SolutionSetInCommandLine_SetsSolutionFile()
         {
-            ConfigurationManager.AppSettings["solution"] = "B.sln";
-
-            CodeScopeConfiguration config = CreateConfig(emptyArgs);
-
-            string expected = Path.Combine(Directory.GetCurrentDirectory(), "B.sln");
-            Assert.AreEqual(expected, config.SolutionFileName());
-        }
-
-        [Test]
-        public void Configuration_SolutionSetInCommandLine_OverridesConfiguration()
-        {
-            ConfigurationManager.AppSettings["solution"] = "A.sln";
             string[] args = new []
                 {
-                    "-solution", "B.sln"
+                    "-solution", "A.sln"
                 };
 
             CodeScopeConfiguration config = CreateConfig(args);
 
-            string expected = Path.Combine(Directory.GetCurrentDirectory(), "B.sln");
+            string expected = Path.Combine(currentFolder, "A.sln");
             Assert.AreEqual(expected, config.SolutionFileName());
         }
 
@@ -41,12 +28,12 @@ namespace codescope.Tests
         {
             string[] args = new[]
                 {
-                    "someSolution.sln"
+                    "A.sln"
                 };
 
             CodeScopeConfiguration config = CreateConfig(args);
 
-            string expected = Path.Combine(currentFolder, "someSolution.sln");
+            string expected = Path.Combine(currentFolder, "A.sln");
             Assert.AreEqual(expected, config.SolutionFileName());
         }
 
@@ -58,50 +45,36 @@ namespace codescope.Tests
         }
 
         [Test]
-        public void Configuration_ProjectSetInConfigFile_SetsProjectFileCorrectly()
-        {
-            ConfigurationManager.AppSettings["project"] = "someProject";
-
-            CodeScopeConfiguration config = CreateConfig(emptyArgs);
-
-            string expected = Path.Combine(currentFolder, "someProject");
-            Assert.AreEqual(expected, config.ProjectFileName());
-        }
-
-        [Test]
-        public void Configuration_ProjectSetInCommandLine_SetsProjectFileCorrectly()
+        public void Configuration_ProjectSetInCommandLine_SetsProjectFile()
         {
             string[] args = new []
                 {
-                    "-project", "aProject"
+                    "-project", "A.csproj"
                 };
 
             CodeScopeConfiguration config = CreateConfig(args);
 
-            string expected = Path.Combine(Directory.GetCurrentDirectory(), "aProject");
+            string expected = Path.Combine(currentFolder, "A.csproj");
             Assert.AreEqual(expected, config.ProjectFileName());
         }
 
         [Test]
-        public void Configuration_ProjectSetInCommandLine_OverridesConfiguration()
+        public void Configuration_ProjectSetAsParameter_SetsProjectFile()
         {
-            ConfigurationManager.AppSettings["project"] = "someProject";
-
             string[] args = new[]
                 {
-                    "-project", "aProject"
+                    "A.csproj"
                 };
 
             CodeScopeConfiguration config = CreateConfig(args);
 
-            string expected = Path.Combine(Directory.GetCurrentDirectory(), "aProject");
+            string expected = Path.Combine(currentFolder, "A.csproj");
             Assert.AreEqual(expected, config.ProjectFileName());
         }
 
         [Test]
         public void Configuration_ProjectNotSet_ReturnsEmptyProjectFileName()
         {
-            ConfigurationManager.AppSettings["project"] = "";
             CodeScopeConfiguration config = CreateConfig(emptyArgs);
             Assert.AreEqual("", config.ProjectFileName());
         }
@@ -109,7 +82,7 @@ namespace codescope.Tests
 
         private static CodeScopeConfiguration CreateConfig(string[] args)
         {
-            return new CodeScopeConfiguration(args, ConfigurationManager.AppSettings);
+            return new CodeScopeConfiguration(args);
         }
     }
 }

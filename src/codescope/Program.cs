@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 using Roslyn.Services;
 
 namespace codescope
@@ -8,7 +7,7 @@ namespace codescope
     {
         static void Main(string[] args)
         {
-            CodeScopeConfiguration configuration = new CodeScopeConfiguration(args, ConfigurationManager.AppSettings);
+            CodeScopeConfiguration configuration = new CodeScopeConfiguration(args);
 
             try
             {
