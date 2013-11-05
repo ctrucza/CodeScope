@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Roslyn.Compilers.CSharp;
 using Roslyn.Services;
 
@@ -9,9 +10,10 @@ namespace codescope
         private readonly IProject project;
         private readonly List<CommonCollector> collectors = new List<CommonCollector>();
 
-        public ProjectStatistics(IProject project)
+        public ProjectStatistics(IProject project, IEnumerable<CommonCollector> collectors )
         {
             this.project = project;
+            this.collectors = collectors.ToList();
         }
 
         public void CollectStatistics()
@@ -30,11 +32,6 @@ namespace codescope
                     collector.Visit(root);
                 }
             }
-        }
-
-        public void AddCollectors(IEnumerable<CommonCollector> collectorList)
-        {
-            collectors.AddRange(collectorList);
         }
     }
 }

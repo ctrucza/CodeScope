@@ -19,10 +19,8 @@ namespace codescope
 
             foreach (IProject project in solution.Projects)
             {
-                ProjectStatistics p = new ProjectStatistics(project);
+                ProjectStatistics p = new ProjectStatistics(project, collectors.Values);
                 projectStatistics.Add(p);
-
-                p.AddCollectors(collectors.Values);
             }
         }
 
@@ -47,10 +45,6 @@ namespace codescope
                 Console.WriteLine(collector.Value);
 
             }
-
-            //Console.WriteLine("Classes: {0}", classCollector.Nodes.Count);
-            //Console.WriteLine("Interfaces: {0}", interfaceCollector.Nodes.Count);
-            //Console.WriteLine("Enums: {0}", enumCollector.Nodes.Count);
         }
     }
 }
