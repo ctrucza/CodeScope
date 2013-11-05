@@ -13,17 +13,17 @@ namespace codescope
         {
             StringBuilder sb = new StringBuilder();
 
-            sb.AppendFormat("Count: {0}", Nodes.Count);
-            sb.AppendLine();
+            sb.AppendLine(string.Format("Count: {0}", Nodes.Count));
+
+            if (Nodes.Count == 0)
+                return sb.ToString();
 
             int totalLoc = Nodes.Sum(node => node.GetText().LineCount);
             int averageLoc = totalLoc / Nodes.Count;
-            sb.AppendFormat("Average LOC: {0}", averageLoc);
-            sb.AppendLine();
+            sb.AppendLine(string.Format("Average LOC: {0}", averageLoc));
 
             int maxLoc = Nodes.Max(node => node.GetText().LineCount);
-            sb.AppendFormat("Max LOC: {0}", maxLoc);
-            sb.AppendLine();
+            sb.AppendLine(string.Format("Max LOC: {0}", maxLoc));
 
             IEnumerable<SyntaxNode> syntaxNodes = Nodes.Where(node => node.GetText().LineCount == maxLoc);
             foreach (SyntaxNode syntaxNode in syntaxNodes)
