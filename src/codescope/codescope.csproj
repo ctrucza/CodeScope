@@ -68,7 +68,6 @@
     <Compile Include="CommandLine.cs" />
     <Compile Include="CommonCollector.cs" />
     <Compile Include="EnumCollector.cs" />
-    <Compile Include="GenericCollector.cs" />
     <Compile Include="InterfaceCollector.cs" />
     <Compile Include="MethodCollector.cs" />
     <Compile Include="Program.cs" />
