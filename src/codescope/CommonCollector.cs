@@ -7,25 +7,30 @@ namespace codescope
 {
     class CommonCollector: SyntaxWalker
     {
-        public readonly List<SyntaxNode> Nodes = new List<SyntaxNode>();
+        private readonly List<SyntaxNode> nodes = new List<SyntaxNode>();
+
+        protected void RegisterNode(SyntaxNode node)
+        {
+            nodes.Add(node);
+        }
 
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
 
-            sb.AppendLine(string.Format("Count: {0}", Nodes.Count));
+            sb.AppendLine(string.Format("Count: {0}", nodes.Count));
 
-            if (Nodes.Count == 0)
+            if (nodes.Count == 0)
                 return sb.ToString();
 
-            int totalLoc = Nodes.Sum(node => node.GetText().LineCount);
-            int averageLoc = totalLoc / Nodes.Count;
+            int totalLoc = nodes.Sum(node => node.GetText().LineCount);
+            int averageLoc = totalLoc / nodes.Count;
             sb.AppendLine(string.Format("Average LOC: {0}", averageLoc));
 
-            int maxLoc = Nodes.Max(node => node.GetText().LineCount);
+            int maxLoc = nodes.Max(node => node.GetText().LineCount);
             sb.AppendLine(string.Format("Max LOC: {0}", maxLoc));
 
-            IEnumerable<SyntaxNode> syntaxNodes = Nodes.Where(node => node.GetText().LineCount == maxLoc);
+            IEnumerable<SyntaxNode> syntaxNodes = nodes.Where(node => node.GetText().LineCount == maxLoc);
             foreach (SyntaxNode syntaxNode in syntaxNodes)
             {
                 string name = GetNameFor(syntaxNode);
@@ -37,11 +42,19 @@ namespace codescope
             return sb.ToString();
         }
 
-        protected virtual string GetNameFor(SyntaxNode node)
+        private string GetNameFor(SyntaxNode node)
         {
             string result = null;
+
+            // TODO: find a nicer view to get the name of a node
             if (node is BaseTypeDeclarationSyntax)
                 result = (node as BaseTypeDeclarationSyntax).Identifier.ToString();
+            else if (node is MethodDeclarationSyntax)
+            {
+                result = (node as MethodDeclarationSyntax).Identifier.ToString();
+                result = GetNameFor(node.Parent) + "." + result;
+            }
+
             return result;
         }
     }

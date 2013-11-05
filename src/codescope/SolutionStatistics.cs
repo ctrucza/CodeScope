@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Roslyn.Compilers.CSharp;
 using Roslyn.Services;
 
 namespace codescope
@@ -11,17 +12,10 @@ namespace codescope
 
         public SolutionStatistics(ISolution solution)
         {
-            collectors["Classes"] = new ClassCollector();
-            collectors["Methods"] = new MethodCollector();
-            collectors["Interfaces"] = new InterfaceCollector();
-            collectors["Enums"] = new EnumCollector();
-
-            // We should be able to create these generic collectors somehow...
-            // Just not to create all those pesky oneliner classes
-
-            //collectors["Classes (g)"] = new GenericCollector<ClassDeclarationSyntax>();
-            //collectors["Interfaces (g)"] = new GenericCollector<InterfaceDeclarationSyntax>();
-            //collectors["Enums (g)"] = new GenericCollector<EnumDeclarationSyntax>();
+            collectors["Classes"] = new GenericCollector<ClassDeclarationSyntax>();
+            collectors["Methods"] = new GenericCollector<MethodDeclarationSyntax>();
+            collectors["Interfaces"] = new GenericCollector<InterfaceDeclarationSyntax>();
+            collectors["Enums"] = new GenericCollector<EnumDeclarationSyntax>();
 
             foreach (IProject project in solution.Projects)
             {
