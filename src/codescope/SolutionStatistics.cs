@@ -8,14 +8,14 @@ namespace codescope
     class SolutionStatistics
     {
         private readonly List<ProjectStatistics> projectStatistics = new List<ProjectStatistics>();
-        private readonly Dictionary<string, CommonCollector> collectors = new Dictionary<string, CommonCollector>();
+        private readonly Dictionary<string, Collector> collectors = new Dictionary<string, Collector>();
 
         public SolutionStatistics(ISolution solution)
         {
-            collectors["Classes"] = new CommonCollector(typeof(ClassDeclarationSyntax));
-            collectors["Methods"] = new CommonCollector(typeof(MethodDeclarationSyntax));
-            collectors["Interfaces"] = new CommonCollector(typeof(InterfaceDeclarationSyntax));
-            collectors["Enums"] = new CommonCollector(typeof(EnumDeclarationSyntax));
+            collectors["Classes"] = new Collector(typeof(ClassDeclarationSyntax));
+            collectors["Methods"] = new Collector(typeof(MethodDeclarationSyntax));
+            collectors["Interfaces"] = new Collector(typeof(InterfaceDeclarationSyntax));
+            collectors["Enums"] = new Collector(typeof(EnumDeclarationSyntax));
 
             foreach (IProject project in solution.Projects)
             {
@@ -38,7 +38,7 @@ namespace codescope
             Console.WriteLine("Summary:");
             Console.WriteLine("Projects: {0}", projectStatistics.Count);
 
-            foreach (KeyValuePair<string, CommonCollector> collector in collectors)
+            foreach (var collector in collectors)
             {
                 string name = collector.Key;
                 Console.WriteLine("{0}", name);

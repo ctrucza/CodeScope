@@ -6,12 +6,12 @@ using Roslyn.Compilers.CSharp;
 
 namespace codescope
 {
-    class CommonCollector: SyntaxWalker
+    class Collector: SyntaxWalker
     {
         private Type t;
         private readonly List<SyntaxNode> nodes = new List<SyntaxNode>();
 
-        public CommonCollector(Type t)
+        public Collector(Type t)
         {
             this.t = t;
         }
