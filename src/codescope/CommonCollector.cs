@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Roslyn.Compilers.CSharp;
@@ -7,9 +8,22 @@ namespace codescope
 {
     class CommonCollector: SyntaxWalker
     {
+        private Type t;
         private readonly List<SyntaxNode> nodes = new List<SyntaxNode>();
 
-        protected void RegisterNode(SyntaxNode node)
+        public CommonCollector(Type t)
+        {
+            this.t = t;
+        }
+
+        public override void Visit(SyntaxNode node)
+        {
+            base.Visit(node);
+            if (node.GetType() == t)
+                RegisterNode(node);
+        }
+
+        private void RegisterNode(SyntaxNode node)
         {
             nodes.Add(node);
         }

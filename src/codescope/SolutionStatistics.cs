@@ -12,10 +12,10 @@ namespace codescope
 
         public SolutionStatistics(ISolution solution)
         {
-            collectors["Classes"] = new GenericCollector<ClassDeclarationSyntax>();
-            collectors["Methods"] = new GenericCollector<MethodDeclarationSyntax>();
-            collectors["Interfaces"] = new GenericCollector<InterfaceDeclarationSyntax>();
-            collectors["Enums"] = new GenericCollector<EnumDeclarationSyntax>();
+            collectors["Classes"] = new CommonCollector(typeof(ClassDeclarationSyntax));
+            collectors["Methods"] = new CommonCollector(typeof(MethodDeclarationSyntax));
+            collectors["Interfaces"] = new CommonCollector(typeof(InterfaceDeclarationSyntax));
+            collectors["Enums"] = new CommonCollector(typeof(EnumDeclarationSyntax));
 
             foreach (IProject project in solution.Projects)
             {
