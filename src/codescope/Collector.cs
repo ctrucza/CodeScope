@@ -1,31 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Roslyn.Compilers.CSharp;
 
 namespace codescope
 {
-    class Collector: SyntaxWalker
+    class Collector<T,U>: SyntaxWalker
+        where U:NodeWrapper, new()
     {
-        private Type t;
-        private readonly List<SyntaxNode> nodes = new List<SyntaxNode>();
-
-        public Collector(Type t)
-        {
-            this.t = t;
-        }
+        private readonly List<U> nodes = new List<U>();
 
         public override void Visit(SyntaxNode node)
         {
             base.Visit(node);
-            if (node.GetType() == t)
+            if (node is T)
                 RegisterNode(node);
         }
 
         private void RegisterNode(SyntaxNode node)
         {
-            nodes.Add(node);
+            U wrapper = new U();
+            wrapper.SetNode(node);
+            nodes.Add(wrapper);
         }
 
         public override string ToString()
@@ -37,37 +33,67 @@ namespace codescope
             if (nodes.Count == 0)
                 return sb.ToString();
 
-            int totalLoc = nodes.Sum(node => node.GetText().LineCount);
+            int totalLoc = nodes.Sum(node => node.GetLineCount());
             int averageLoc = totalLoc / nodes.Count;
             sb.AppendLine(string.Format("Average LOC: {0}", averageLoc));
 
-            int maxLoc = nodes.Max(node => node.GetText().LineCount);
+            int maxLoc = nodes.Max(node => node.GetLineCount());
             sb.AppendLine(string.Format("Max LOC: {0}", maxLoc));
 
-            IEnumerable<SyntaxNode> syntaxNodes = nodes.Where(node => node.GetText().LineCount == maxLoc);
-            foreach (SyntaxNode syntaxNode in syntaxNodes)
+            IEnumerable<NodeWrapper> nodeWrappers = nodes.Where(node => node.GetLineCount() == maxLoc);
+            foreach (NodeWrapper nodeWrapper in nodeWrappers)
             {
-                string name = GetNameFor(syntaxNode);
-                if (string.IsNullOrEmpty(name))
-                    continue;
+                string name = nodeWrapper.GetName();
                 sb.AppendLine(name);
             }
 
             return sb.ToString();
         }
 
-        private string GetNameFor(SyntaxNode node)
+    }
+
+    class ClassWrapper: NodeWrapper
+    {
+    }
+
+    class MethodWrapper: NodeWrapper
+    {
+        protected override string DoGetName(SyntaxNode aNode)
+        {
+            // Assert aNode is MehodDeclarationSyntax
+            string result = (aNode as MethodDeclarationSyntax).Identifier.ToString();
+            NodeWrapper parent = new NodeWrapper();
+            parent.SetNode(aNode.Parent);
+            result = parent.GetName() + "." + result;
+            return result;
+        }
+    }
+
+    internal class NodeWrapper
+    {
+        private SyntaxNode node;
+
+        public void SetNode(SyntaxNode aNode)
+        {
+            node = aNode;
+        }
+
+        public int GetLineCount()
+        {
+            return node.GetText().LineCount;
+        }
+
+        public string GetName()
+        {
+            return DoGetName(node);
+        }
+
+        protected virtual string DoGetName(SyntaxNode aNode)
         {
             string result = null;
 
-            // TODO: find a nicer view to get the name of a node
-            if (node is BaseTypeDeclarationSyntax)
-                result = (node as BaseTypeDeclarationSyntax).Identifier.ToString();
-            else if (node is MethodDeclarationSyntax)
-            {
-                result = (node as MethodDeclarationSyntax).Identifier.ToString();
-                result = GetNameFor(node.Parent) + "." + result;
-            }
+            if (aNode is BaseTypeDeclarationSyntax)
+                result = (aNode as BaseTypeDeclarationSyntax).Identifier.ToString();
 
             return result;
         }

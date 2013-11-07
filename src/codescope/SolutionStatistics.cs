@@ -8,14 +8,19 @@ namespace codescope
     class SolutionStatistics
     {
         private readonly List<ProjectStatistics> projectStatistics = new List<ProjectStatistics>();
-        private readonly Dictionary<string, Collector> collectors = new Dictionary<string, Collector>();
+        private readonly Dictionary<string, SyntaxWalker> collectors = new Dictionary<string, SyntaxWalker>();
 
         public SolutionStatistics(ISolution solution)
         {
-            collectors["Classes"] = new Collector(typeof(ClassDeclarationSyntax));
-            collectors["Methods"] = new Collector(typeof(MethodDeclarationSyntax));
-            collectors["Interfaces"] = new Collector(typeof(InterfaceDeclarationSyntax));
-            collectors["Enums"] = new Collector(typeof(EnumDeclarationSyntax));
+            //collectors["Classes"] = new Collector(typeof(ClassDeclarationSyntax));
+            //collectors["Methods"] = new Collector(typeof(MethodDeclarationSyntax));
+            //collectors["Interfaces"] = new Collector(typeof(InterfaceDeclarationSyntax));
+            //collectors["Enums"] = new Collector(typeof(EnumDeclarationSyntax));
+
+            collectors["Classes"] = new Collector<ClassDeclarationSyntax, ClassWrapper>();
+            collectors["Methods"] = new Collector<MethodDeclarationSyntax, MethodWrapper>();
+            collectors["Interfaces"] = new Collector<InterfaceDeclarationSyntax, NodeWrapper>();
+            collectors["Enums"] = new Collector<EnumDeclarationSyntax, NodeWrapper>();
 
             foreach (IProject project in solution.Projects)
             {

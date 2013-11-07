@@ -8,9 +8,9 @@ namespace codescope
     class ProjectStatistics
     {
         private readonly IProject project;
-        private readonly List<Collector> collectors = new List<Collector>();
+        private readonly List<SyntaxWalker> collectors = new List<SyntaxWalker>();
 
-        public ProjectStatistics(IProject project, IEnumerable<Collector> collectors )
+        public ProjectStatistics(IProject project, IEnumerable<SyntaxWalker> collectors )
         {
             this.project = project;
             this.collectors = collectors.ToList();
@@ -27,7 +27,7 @@ namespace codescope
                 SyntaxTree tree = SyntaxTree.ParseFile(document.FilePath);
                 SyntaxNode root = tree.GetRoot();
 
-                foreach (Collector collector in collectors)
+                foreach (SyntaxWalker collector in collectors)
                 {
                     collector.Visit(root);
                 }

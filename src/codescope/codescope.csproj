@@ -66,7 +66,6 @@
     <Compile Include="CodeScopeConfiguration.cs" />
     <Compile Include="CommandLine.cs" />
     <Compile Include="Collector.cs" />
-    <Compile Include="GenericCollector.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ProjectStatistics.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
