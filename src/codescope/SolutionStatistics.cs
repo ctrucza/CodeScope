@@ -12,11 +12,6 @@ namespace codescope
 
         public SolutionStatistics(ISolution solution)
         {
-            //collectors["Classes"] = new Collector(typeof(ClassDeclarationSyntax));
-            //collectors["Methods"] = new Collector(typeof(MethodDeclarationSyntax));
-            //collectors["Interfaces"] = new Collector(typeof(InterfaceDeclarationSyntax));
-            //collectors["Enums"] = new Collector(typeof(EnumDeclarationSyntax));
-
             collectors["Classes"] = new Collector<ClassDeclarationSyntax, ClassWrapper>();
             collectors["Methods"] = new Collector<MethodDeclarationSyntax, MethodWrapper>();
             collectors["Interfaces"] = new Collector<InterfaceDeclarationSyntax, NodeWrapper<InterfaceDeclarationSyntax>>();
@@ -48,7 +43,6 @@ namespace codescope
                 string name = collector.Key;
                 Console.WriteLine("{0}", name);
                 collector.Value.Report();
-                //Console.WriteLine(collector.Value);
 
             }
         }
