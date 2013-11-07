@@ -1,11 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Roslyn.Compilers.CSharp;
 
 namespace codescope
 {
-    class Collector<T,U>: SyntaxWalker
+    interface ICollector
+    {
+        void Report();
+        void Dump();
+    }
+
+    class Collector<T,U>: SyntaxWalker, ICollector
         where T: SyntaxNode
         where U: NodeWrapper<T>, new()
     {
@@ -51,6 +58,18 @@ namespace codescope
             return sb.ToString();
         }
 
+        public void Report()
+        {
+            Console.WriteLine(this);
+        }
+
+        public void Dump()
+        {
+            foreach (U node in nodes)
+            {
+                node.Dump();
+            }
+        }
     }
 
     class ClassWrapper: NodeWrapper<ClassDeclarationSyntax>
@@ -98,6 +117,16 @@ namespace codescope
                 result = (aNode as BaseTypeDeclarationSyntax).Identifier.ToString();
 
             return result;
+        }
+
+        public void Dump()
+        {
+            DoDump(node);
+        }
+
+        protected virtual void DoDump(T aNode)
+        {
+            Console.WriteLine(GetName());
         }
     }
 }

@@ -8,9 +8,9 @@ namespace codescope
     class ProjectStatistics
     {
         private readonly IProject project;
-        private readonly List<SyntaxWalker> collectors = new List<SyntaxWalker>();
+        private readonly List<ICollector> collectors = new List<ICollector>();
 
-        public ProjectStatistics(IProject project, IEnumerable<SyntaxWalker> collectors )
+        public ProjectStatistics(IProject project, IEnumerable<ICollector> collectors )
         {
             this.project = project;
             this.collectors = collectors.ToList();

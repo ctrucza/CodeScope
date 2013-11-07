@@ -17,6 +17,8 @@ namespace codescope
                 statistics.CollectStatistics();
                 statistics.ReportStatistics();
 
+                statistics.Dump();
+
             }
             catch (Exception e)
             {

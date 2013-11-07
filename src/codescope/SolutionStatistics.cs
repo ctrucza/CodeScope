@@ -8,7 +8,7 @@ namespace codescope
     class SolutionStatistics
     {
         private readonly List<ProjectStatistics> projectStatistics = new List<ProjectStatistics>();
-        private readonly Dictionary<string, SyntaxWalker> collectors = new Dictionary<string, SyntaxWalker>();
+        private readonly Dictionary<string, ICollector> collectors = new Dictionary<string, ICollector>();
 
         public SolutionStatistics(ISolution solution)
         {
@@ -47,8 +47,17 @@ namespace codescope
             {
                 string name = collector.Key;
                 Console.WriteLine("{0}", name);
-                Console.WriteLine(collector.Value);
+                collector.Value.Report();
+                //Console.WriteLine(collector.Value);
 
+            }
+        }
+
+        public void Dump()
+        {
+            foreach (ICollector collector in collectors.Values)
+            {
+                collector.Dump();
             }
         }
     }
