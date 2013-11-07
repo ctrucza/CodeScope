@@ -1,4 +1,5 @@
-﻿using Roslyn.Compilers.CSharp;
+﻿using System;
+using Roslyn.Compilers.CSharp;
 
 namespace codescope
 {
@@ -11,6 +12,11 @@ namespace codescope
             parent.SetNode(aNode.Parent);
             result = parent.GetName() + "." + result;
             return result;
+        }
+
+        protected override void DoDump(MethodDeclarationSyntax aNode)
+        {
+            Console.WriteLine("{0} ({1})", GetName(), GetLineCount());
         }
     }
 }
