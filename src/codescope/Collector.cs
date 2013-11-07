@@ -6,7 +6,8 @@ using Roslyn.Compilers.CSharp;
 namespace codescope
 {
     class Collector<T,U>: SyntaxWalker
-        where U:NodeWrapper, new()
+        where T: SyntaxNode
+        where U: NodeWrapper<T>, new()
     {
         private readonly List<U> nodes = new List<U>();
 
@@ -14,10 +15,10 @@ namespace codescope
         {
             base.Visit(node);
             if (node is T)
-                RegisterNode(node);
+                RegisterNode(node as T);
         }
 
-        private void RegisterNode(SyntaxNode node)
+        private void RegisterNode(T node)
         {
             U wrapper = new U();
             wrapper.SetNode(node);
@@ -40,8 +41,8 @@ namespace codescope
             int maxLoc = nodes.Max(node => node.GetLineCount());
             sb.AppendLine(string.Format("Max LOC: {0}", maxLoc));
 
-            IEnumerable<NodeWrapper> nodeWrappers = nodes.Where(node => node.GetLineCount() == maxLoc);
-            foreach (NodeWrapper nodeWrapper in nodeWrappers)
+            IEnumerable<U> nodeWrappers = nodes.Where(node => node.GetLineCount() == maxLoc);
+            foreach (U nodeWrapper in nodeWrappers)
             {
                 string name = nodeWrapper.GetName();
                 sb.AppendLine(name);
@@ -52,28 +53,29 @@ namespace codescope
 
     }
 
-    class ClassWrapper: NodeWrapper
+    class ClassWrapper: NodeWrapper<ClassDeclarationSyntax>
     {
     }
 
-    class MethodWrapper: NodeWrapper
+    class MethodWrapper: NodeWrapper<MethodDeclarationSyntax>
     {
-        protected override string DoGetName(SyntaxNode aNode)
+        protected override string DoGetName(MethodDeclarationSyntax aNode)
         {
             // Assert aNode is MehodDeclarationSyntax
-            string result = (aNode as MethodDeclarationSyntax).Identifier.ToString();
-            NodeWrapper parent = new NodeWrapper();
+            string result = aNode.Identifier.ToString();
+            NodeWrapper <SyntaxNode> parent = new NodeWrapper<SyntaxNode>();
             parent.SetNode(aNode.Parent);
             result = parent.GetName() + "." + result;
             return result;
         }
     }
 
-    internal class NodeWrapper
+    internal class NodeWrapper<T>
+        where T: SyntaxNode
     {
-        private SyntaxNode node;
+        private T node;
 
-        public void SetNode(SyntaxNode aNode)
+        public void SetNode(T aNode)
         {
             node = aNode;
         }
@@ -88,7 +90,7 @@ namespace codescope
             return DoGetName(node);
         }
 
-        protected virtual string DoGetName(SyntaxNode aNode)
+        protected virtual string DoGetName(T aNode)
         {
             string result = null;
 

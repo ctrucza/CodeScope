@@ -19,8 +19,8 @@ namespace codescope
 
             collectors["Classes"] = new Collector<ClassDeclarationSyntax, ClassWrapper>();
             collectors["Methods"] = new Collector<MethodDeclarationSyntax, MethodWrapper>();
-            collectors["Interfaces"] = new Collector<InterfaceDeclarationSyntax, NodeWrapper>();
-            collectors["Enums"] = new Collector<EnumDeclarationSyntax, NodeWrapper>();
+            collectors["Interfaces"] = new Collector<InterfaceDeclarationSyntax, NodeWrapper<InterfaceDeclarationSyntax>>();
+            collectors["Enums"] = new Collector<EnumDeclarationSyntax, NodeWrapper<EnumDeclarationSyntax>>();
 
             foreach (IProject project in solution.Projects)
             {
