@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="55ab8635c1ac4ada9a5aea18a8d09499" Name="Diagram1" >
+        <EntityTypeShape EntityType="Churn.Project" Width="1.5" PointX="0.75" PointY="4.375" />
+        <EntityTypeShape EntityType="Churn.Changeset" Width="1.5" PointX="3" PointY="5.375" />
+        <AssociationConnector Association="Churn.ProjectChangeset" />
+        <EntityTypeShape EntityType="Churn.Change" Width="1.5" PointX="5.25" PointY="5.625" />
+        <AssociationConnector Association="Churn.ChangesetChange" ManuallyRouted="false" >
+        </AssociationConnector>
+        <EntityTypeShape EntityType="Churn.Item" Width="1.5" PointX="3" PointY="2.625" />
+        <AssociationConnector Association="Churn.ProjectItem" />
+        <EntityTypeShape EntityType="Churn.ItemVersion" Width="1.5" PointX="7.5" PointY="4" />
+        <AssociationConnector Association="Churn.ItemItemVersion" />
+        <AssociationConnector Association="Churn.ChangeItemVersion" />
+        <EntityTypeShape EntityType="Churn.DiffStat" Width="1.5" PointX="7.5" PointY="8.375" />
+        <AssociationConnector Association="Churn.ChangeDiffStat" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

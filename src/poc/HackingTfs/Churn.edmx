@@ -1,0 +1,456 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Churn.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="ChurnStoreContainer">
+    <EntitySet Name="Projects" EntityType="Churn.Store.Projects" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Changesets" EntityType="Churn.Store.Changesets" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Changes" EntityType="Churn.Store.Changes" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Items" EntityType="Churn.Store.Items" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="ItemVersions" EntityType="Churn.Store.ItemVersions" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="DiffStats" EntityType="Churn.Store.DiffStats" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="ProjectChangeset" Association="Churn.Store.ProjectChangeset">
+      <End Role="Project" EntitySet="Projects" />
+      <End Role="Changeset" EntitySet="Changesets" />
+    </AssociationSet>
+    <AssociationSet Name="ChangesetChange" Association="Churn.Store.ChangesetChange">
+      <End Role="Changeset" EntitySet="Changesets" />
+      <End Role="Change" EntitySet="Changes" />
+    </AssociationSet>
+    <AssociationSet Name="ProjectItem" Association="Churn.Store.ProjectItem">
+      <End Role="Project" EntitySet="Projects" />
+      <End Role="Item" EntitySet="Items" />
+    </AssociationSet>
+    <AssociationSet Name="ItemItemVersion" Association="Churn.Store.ItemItemVersion">
+      <End Role="Item" EntitySet="Items" />
+      <End Role="ItemVersion" EntitySet="ItemVersions" />
+    </AssociationSet>
+    <AssociationSet Name="ChangeItemVersion" Association="Churn.Store.ChangeItemVersion">
+      <End Role="Change" EntitySet="Changes" />
+      <End Role="ItemVersion" EntitySet="ItemVersions" />
+    </AssociationSet>
+    <AssociationSet Name="ChangeDiffStat" Association="Churn.Store.ChangeDiffStat">
+      <End Role="Change" EntitySet="Changes" />
+      <End Role="DiffStat" EntitySet="DiffStats" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Projects">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Path" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Changesets">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CreationDate" Type="datetime" Nullable="false" />
+    <Property Name="CommitterDisplayName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Comment" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Status" Type="int" Nullable="false" />
+    <Property Name="ChangesetId" Type="bigint" Nullable="false" />
+    <Property Name="Project_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Changes">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ChangeType" Type="int" Nullable="false" />
+    <Property Name="Changeset_Id" Type="int" Nullable="false" />
+    <Property Name="ItemVersion_Id" Type="int" Nullable="false" />
+    <Property Name="DiffStats_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Items">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ServerItem" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="ItemType" Type="int" Nullable="false" />
+    <Property Name="Project_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ItemVersions">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Version" Type="bigint" Nullable="false" />
+    <Property Name="Stream" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Encoding" Type="bigint" Nullable="false" />
+    <Property Name="Item_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="DiffStats">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="InitialLineCount" Type="bigint" Nullable="false" />
+    <Property Name="Added" Type="bigint" Nullable="false" />
+    <Property Name="Modified" Type="bigint" Nullable="false" />
+    <Property Name="Deleted" Type="bigint" Nullable="false" />
+    <Property Name="FinalLineCount" Type="bigint" Nullable="false" />
+  </EntityType>
+  <Association Name="ProjectChangeset">
+    <End Role="Project" Type="Churn.Store.Projects" Multiplicity="1" />
+    <End Role="Changeset" Type="Churn.Store.Changesets" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Project">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Changeset">
+        <PropertyRef Name="Project_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ChangesetChange">
+    <End Role="Changeset" Type="Churn.Store.Changesets" Multiplicity="1" />
+    <End Role="Change" Type="Churn.Store.Changes" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Changeset">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Change">
+        <PropertyRef Name="Changeset_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ProjectItem">
+    <End Role="Project" Type="Churn.Store.Projects" Multiplicity="1" />
+    <End Role="Item" Type="Churn.Store.Items" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Project">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Item">
+        <PropertyRef Name="Project_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ItemItemVersion">
+    <End Role="Item" Type="Churn.Store.Items" Multiplicity="1" />
+    <End Role="ItemVersion" Type="Churn.Store.ItemVersions" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Item">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ItemVersion">
+        <PropertyRef Name="Item_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ChangeItemVersion">
+    <End Role="Change" Type="Churn.Store.Changes" Multiplicity="*" />
+    <End Role="ItemVersion" Type="Churn.Store.ItemVersions" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="ItemVersion">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Change">
+        <PropertyRef Name="ItemVersion_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ChangeDiffStat">
+    <End Role="Change" Type="Churn.Store.Changes" Multiplicity="*" />
+    <End Role="DiffStat" Type="Churn.Store.DiffStats" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="DiffStat">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Change">
+        <PropertyRef Name="DiffStats_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="Churn" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="ChurnContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Projects" EntityType="Churn.Project" />
+          <EntitySet Name="Changesets" EntityType="Churn.Changeset" />
+          <AssociationSet Name="ProjectChangeset" Association="Churn.ProjectChangeset">
+            <End Role="Project" EntitySet="Projects" />
+            <End Role="Changeset" EntitySet="Changesets" />
+          </AssociationSet>
+          <EntitySet Name="Changes" EntityType="Churn.Change" />
+          <AssociationSet Name="ChangesetChange" Association="Churn.ChangesetChange">
+            <End Role="Changeset" EntitySet="Changesets" />
+            <End Role="Change" EntitySet="Changes" />
+          </AssociationSet>
+          <EntitySet Name="Items" EntityType="Churn.Item" />
+          <AssociationSet Name="ProjectItem" Association="Churn.ProjectItem">
+            <End Role="Project" EntitySet="Projects" />
+            <End Role="Item" EntitySet="Items" />
+          </AssociationSet>
+          <EntitySet Name="ItemVersions" EntityType="Churn.ItemVersion" />
+          <AssociationSet Name="ItemItemVersion" Association="Churn.ItemItemVersion">
+            <End Role="Item" EntitySet="Items" />
+            <End Role="ItemVersion" EntitySet="ItemVersions" />
+          </AssociationSet>
+          <AssociationSet Name="ChangeItemVersion" Association="Churn.ChangeItemVersion">
+            <End Role="Change" EntitySet="Changes" />
+            <End Role="ItemVersion" EntitySet="ItemVersions" />
+          </AssociationSet>
+          <EntitySet Name="DiffStats" EntityType="Churn.DiffStat" />
+          <AssociationSet Name="ChangeDiffStat" Association="Churn.ChangeDiffStat">
+            <End Role="Change" EntitySet="Changes" />
+            <End Role="DiffStat" EntitySet="DiffStats" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Project">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Path" Nullable="false" />
+          <NavigationProperty Name="Changesets" Relationship="Churn.ProjectChangeset" FromRole="Project" ToRole="Changeset" />
+          <NavigationProperty Name="Items" Relationship="Churn.ProjectItem" FromRole="Project" ToRole="Item" />
+        </EntityType>
+        <EntityType Name="Changeset">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="DateTime" Name="CreationDate" Nullable="false" />
+          <NavigationProperty Name="Project" Relationship="Churn.ProjectChangeset" FromRole="Changeset" ToRole="Project" />
+          <Property Type="String" Name="CommitterDisplayName" Nullable="false" />
+          <Property Type="String" Name="Comment" Nullable="false" />
+          <Property Type="Churn.ChangesetStatus" Name="Status" Nullable="false" />
+          <NavigationProperty Name="Changes" Relationship="Churn.ChangesetChange" FromRole="Changeset" ToRole="Change" />
+          <Property Type="Int64" Name="ChangesetId" Nullable="false" />
+        </EntityType>
+        <Association Name="ProjectChangeset">
+          <End Type="Churn.Project" Role="Project" Multiplicity="1" />
+          <End Type="Churn.Changeset" Role="Changeset" Multiplicity="*" />
+        </Association>
+        <EntityType Name="Change">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Churn.ChangeType" Name="ChangeType" Nullable="false" />
+          <NavigationProperty Name="Changeset" Relationship="Churn.ChangesetChange" FromRole="Change" ToRole="Changeset" />
+          <NavigationProperty Name="ItemVersion" Relationship="Churn.ChangeItemVersion" FromRole="Change" ToRole="ItemVersion" />
+          <NavigationProperty Name="DiffStats" Relationship="Churn.ChangeDiffStat" FromRole="Change" ToRole="DiffStat" />
+        </EntityType>
+        <EnumType Name="ChangeType" cg:ExternalTypeName=" Microsoft.TeamFoundation.VersionControl.Client.ChangeType" IsFlags="true" >
+          <Member Name="None" Value="1" />
+          <Member Name="Add" Value="2" />
+          <Member Name="Edit" Value="4" />
+          <Member Name="Encoding" Value="8" />
+          <Member Name="Rename" Value="16" />
+          <Member Name="Delete" Value="32" />
+          <Member Name="Undelete" Value="64" />
+          <Member Name="Branch" Value="128" />
+          <Member Name="Merge" Value="256" />
+          <Member Name="Lock" Value="512" />
+          <Member Name="Rollback" Value="1024" />
+          <Member Name="SourceRename" Value="2048" />
+          <Member Name="Property" Value="8192" />
+        </EnumType>
+        <EnumType Name="ItemType" cg:ExternalTypeName="Microsoft.TeamFoundation.VersionControl.Client.ItemType">
+          <Member Name="Any" Value="0" />
+          <Member Name="Folder" Value="1" />
+          <Member Name="File" Value="2" />
+        </EnumType>
+        <EnumType Name="ChangesetStatus">
+          <Member Name="New" />
+          <Member Name="InProgress" />
+          <Member Name="Done" />
+          <Member Name="Error" />
+        </EnumType>
+        <Association Name="ChangesetChange">
+          <End Type="Churn.Changeset" Role="Changeset" Multiplicity="1" />
+          <End Type="Churn.Change" Role="Change" Multiplicity="*" />
+        </Association>
+        <EntityType Name="Item">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="ServerItem" Nullable="false" />
+          <NavigationProperty Name="Project" Relationship="Churn.ProjectItem" FromRole="Item" ToRole="Project" />
+          <NavigationProperty Name="Versions" Relationship="Churn.ItemItemVersion" FromRole="Item" ToRole="ItemVersion" />
+          <Property Type="Churn.ItemType" Name="ItemType" Nullable="false" />
+        </EntityType>
+        <Association Name="ProjectItem">
+          <End Type="Churn.Project" Role="Project" Multiplicity="1" />
+          <End Type="Churn.Item" Role="Item" Multiplicity="*" />
+        </Association>
+        <EntityType Name="ItemVersion">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int64" Name="Version" Nullable="false" />
+          <Property Type="String" Name="Stream" Nullable="false" />
+          <NavigationProperty Name="Item" Relationship="Churn.ItemItemVersion" FromRole="ItemVersion" ToRole="Item" />
+          <NavigationProperty Name="Change" Relationship="Churn.ChangeItemVersion" FromRole="ItemVersion" ToRole="Change" />
+          <Property Type="Int64" Name="Encoding" Nullable="false" />
+        </EntityType>
+        <Association Name="ItemItemVersion">
+          <End Type="Churn.Item" Role="Item" Multiplicity="1" />
+          <End Type="Churn.ItemVersion" Role="ItemVersion" Multiplicity="*" />
+        </Association>
+        <Association Name="ChangeItemVersion">
+          <End Type="Churn.Change" Role="Change" Multiplicity="1" />
+          <End Type="Churn.ItemVersion" Role="ItemVersion" Multiplicity="1" />
+        </Association>
+        <EntityType Name="DiffStat">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int64" Name="InitialLineCount" Nullable="false" />
+          <Property Type="Int64" Name="Added" Nullable="false" />
+          <Property Type="Int64" Name="Modified" Nullable="false" />
+          <Property Type="Int64" Name="Deleted" Nullable="false" />
+          <Property Type="Int64" Name="FinalLineCount" Nullable="false" />
+          <NavigationProperty Name="Change" Relationship="Churn.ChangeDiffStat" FromRole="DiffStat" ToRole="Change" />
+        </EntityType>
+        <Association Name="ChangeDiffStat">
+          <End Type="Churn.Change" Role="Change" Multiplicity="1" />
+          <End Type="Churn.DiffStat" Role="DiffStat" Multiplicity="1" />
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ChurnStoreContainer" CdmEntityContainer="ChurnContainer">
+    <EntitySetMapping Name="Projects">
+      <EntityTypeMapping TypeName="IsTypeOf(Churn.Project)">
+        <MappingFragment StoreEntitySet="Projects">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Path" ColumnName="Path" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Changesets">
+      <EntityTypeMapping TypeName="IsTypeOf(Churn.Changeset)">
+        <MappingFragment StoreEntitySet="Changesets">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="CreationDate" ColumnName="CreationDate" />
+          <ScalarProperty Name="CommitterDisplayName" ColumnName="CommitterDisplayName" />
+          <ScalarProperty Name="Comment" ColumnName="Comment" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="ChangesetId" ColumnName="ChangesetId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Changes">
+      <EntityTypeMapping TypeName="IsTypeOf(Churn.Change)">
+        <MappingFragment StoreEntitySet="Changes">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="ChangeType" ColumnName="ChangeType" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Items">
+      <EntityTypeMapping TypeName="IsTypeOf(Churn.Item)">
+        <MappingFragment StoreEntitySet="Items">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="ServerItem" ColumnName="ServerItem" />
+          <ScalarProperty Name="ItemType" ColumnName="ItemType" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ItemVersions">
+      <EntityTypeMapping TypeName="IsTypeOf(Churn.ItemVersion)">
+        <MappingFragment StoreEntitySet="ItemVersions">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Version" ColumnName="Version" />
+          <ScalarProperty Name="Stream" ColumnName="Stream" />
+          <ScalarProperty Name="Encoding" ColumnName="Encoding" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DiffStats">
+      <EntityTypeMapping TypeName="IsTypeOf(Churn.DiffStat)">
+        <MappingFragment StoreEntitySet="DiffStats">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="InitialLineCount" ColumnName="InitialLineCount" />
+          <ScalarProperty Name="Added" ColumnName="Added" />
+          <ScalarProperty Name="Modified" ColumnName="Modified" />
+          <ScalarProperty Name="Deleted" ColumnName="Deleted" />
+          <ScalarProperty Name="FinalLineCount" ColumnName="FinalLineCount" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="ProjectChangeset" TypeName="Churn.ProjectChangeset" StoreEntitySet="Changesets">
+      <EndProperty Name="Project">
+        <ScalarProperty Name="Id" ColumnName="Project_Id" />
+      </EndProperty>
+      <EndProperty Name="Changeset">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="ChangesetChange" TypeName="Churn.ChangesetChange" StoreEntitySet="Changes">
+      <EndProperty Name="Changeset">
+        <ScalarProperty Name="Id" ColumnName="Changeset_Id" />
+      </EndProperty>
+      <EndProperty Name="Change">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="ProjectItem" TypeName="Churn.ProjectItem" StoreEntitySet="Items">
+      <EndProperty Name="Project">
+        <ScalarProperty Name="Id" ColumnName="Project_Id" />
+      </EndProperty>
+      <EndProperty Name="Item">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="ItemItemVersion" TypeName="Churn.ItemItemVersion" StoreEntitySet="ItemVersions">
+      <EndProperty Name="Item">
+        <ScalarProperty Name="Id" ColumnName="Item_Id" />
+      </EndProperty>
+      <EndProperty Name="ItemVersion">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="ChangeItemVersion" TypeName="Churn.ChangeItemVersion" StoreEntitySet="Changes">
+      <EndProperty Name="ItemVersion">
+        <ScalarProperty Name="Id" ColumnName="ItemVersion_Id" />
+      </EndProperty>
+      <EndProperty Name="Change">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="ChangeDiffStat" TypeName="Churn.ChangeDiffStat" StoreEntitySet="Changes">
+      <EndProperty Name="DiffStat">
+        <ScalarProperty Name="Id" ColumnName="DiffStats_Id" />
+      </EndProperty>
+      <EndProperty Name="Change">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
