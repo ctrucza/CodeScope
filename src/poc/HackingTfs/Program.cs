@@ -180,16 +180,17 @@ namespace Churn
             db.SaveChanges();
 
             Console.WriteLine("reading history...");
-            IEnumerable history = versionControl.QueryHistory("$/triangles/src/triangles",
-                VersionSpec.Latest,
-                0,
-                RecursionType.Full,
-                null,
-                new ChangesetVersionSpec(1),
-                VersionSpec.Latest,
-                int.MaxValue,
-                true,
-                true);
+            IEnumerable history = versionControl.QueryHistory(
+                path : "$/triangles/src/triangles",
+                version: VersionSpec.Latest,
+                deletionId: 0,
+                recursion: RecursionType.Full,
+                user: null, // all users
+                versionFrom: null, // from the first version...
+                versionTo: null, // to the last version
+                maxCount: Int32.MaxValue,  // 
+                includeChanges: true,
+                slotMode: true);
             Console.WriteLine("processing history...");
             Changeset c;
             foreach (Microsoft.TeamFoundation.VersionControl.Client.Changeset changeset in history)
