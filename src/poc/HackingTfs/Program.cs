@@ -188,7 +188,7 @@ namespace Churn
                 user: null, // all users
                 versionFrom: null, // from the first version...
                 versionTo: null, // to the last version
-                maxCount: Int32.MaxValue,  // 
+                maxCount: Int32.MaxValue,  // return all history
                 includeChanges: true,
                 slotMode: true);
             Console.WriteLine("processing history...");
