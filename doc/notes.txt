@@ -1,0 +1,80 @@
+Vision
+	- insight never achieved before in your project based on the source code and its history
+		- there is a huge amount of untapped information in source control systems
+		- it might be fun to look at it
+		- it might provide insights in your troubles
+		- it might even contribute something to the software development field in general
+			- common historical patterns, evolutions formulated in a new way
+			- understanding why projects fail, common problems, causes
+			- 
+
+Feature level thinking:
+	- what do I want to do: 
+		- create a project
+		- configure the source control
+		- read a full history
+		- show loc history
+		- show class count history
+		- show average method count history
+		- show average method length history
+		- show largest class, longest method
+		- show a class history
+		- show a method history
+		- show coupling for a class (afferent and efferent)
+		- show coupling history
+		- incremental update of history
+		- authors
+		- author statistics
+		- integrate with issue tracking
+			- bugs
+			- features
+			- estimates
+		- cross reference authors with issues
+		- how about branches?
+
+	- source control systems
+		- TFS and Git
+		- mercurial, svn
+		- others
+
+	- languages
+		- C#
+		- C/C++/ObjectiveC
+		- JS
+
+	- usage patterns
+		- archeology: analyze an existing project
+		- telemetry: set up for a new project, run it continuously
+			- hooks for each commit
+			- offer/sell as service
+
+	- in-house service available for all projects
+
+Architecture level thinking
+	- source control adapter
+		- performance: how long/big will be taking a full history
+	- history reader
+	- data storage
+		- SQL
+		- NoSQL
+		- how big it's gonna be?
+	- semantic processing:
+		- Roslyn
+		- libclang
+		- how do we parse JS? (JSLint?)
+	- what application type?
+		- console tools
+		- web application
+		- web service(s)
+	- security
+		- source control authentication
+		- source code security: authorization
+
+Planning
+	- priorities
+		- TFS and Git support
+		- LOC for projects
+		- basic semantics for C# (class count) using Roslyn
+		- basic semantics for C++/ObjC (class count) using libclang
+		- advanced semantics for C#
+		- advances semantics for C++/ObjC
