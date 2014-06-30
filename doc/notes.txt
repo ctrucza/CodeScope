@@ -13,16 +13,20 @@ Feature level thinking:
 		- create a project
 		- configure the source control
 		- read a full history
-		- show loc history
-		- show class count history
-		- show average method count history
-		- show average method length history
-		- show largest class, longest method
-		- show a class history
-		- show a method history
-		- show coupling for a class (afferent and efferent)
-		- show coupling history
 		- incremental update of history
+		- evolution over time of metrics
+			- show loc history
+			- show class count history
+			- show average method count history
+			- show average method length history
+		- show largest class, longest method
+			- show a class history
+				- class metrics: LOC, methods, coupling, coherence etc.
+				- show a method history: what metrics? loc, coupling, levels of abstraction
+				- show coupling for a class (afferent and efferent)
+				- show coupling history
+		- source code telemetry for a spot
+			solution, project, component, class, method level
 		- authors
 		- author statistics
 		- integrate with issue tracking
@@ -53,17 +57,19 @@ Feature level thinking:
 Architecture level thinking
 	- source control adapter
 		- performance: how long/big will be taking a full history
-	- history reader
+	- history reader (activity)
+		- what activities are there?
+			- add new, modify, delete, rename
 	- data storage
 		- SQL
-		- NoSQL
+		- NoSQL (mongodb looks promising)
 		- how big it's gonna be?
 	- semantic processing:
 		- Roslyn
 		- libclang
 		- how do we parse JS? (JSLint?)
 	- what application type?
-		- console tools
+		- console tools/services
 		- web application
 		- web service(s)
 	- security

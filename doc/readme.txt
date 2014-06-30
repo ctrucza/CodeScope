@@ -87,6 +87,7 @@ Components Redux
 
 Fun stuff
 - somehow detect abstraction level in methods and warn if multiple levels are detected
+	- look at where all the calls are going: the classes/methods called to should be few. and if they are more than one, they should be used mostly together (as in other usage sites should follow the same pattern)
 - find clusters of methods using the same subset of variables/properties
 - find patterns in class usage:
 	- clusters of classes using disjunct subsets of the public interface (wrong abstractions: multiple responsibilities? multiple levels of abstraction exposed)
