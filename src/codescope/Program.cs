@@ -24,7 +24,6 @@ namespace codescope
             {
                 Console.WriteLine(e.Message);
             }
-
         }
 
         private static IWorkspace LoadWorkspace(CodeScopeConfiguration configuration)
