@@ -1,0 +1,65 @@
+Reading from TFS
+================
+1. Connecting to TFS (Quick)
+
+            Uri uri = new Uri("https://ctrucza.visualstudio.com/DefaultCollection");
+            TfsTeamProjectCollection tfs = new TfsTeamProjectCollection(uri);
+            tfs.Authenticate();
+
+1.2 Source Control
+
+            VersionControlServer vcs = tfs.GetService<VersionControlServer>();
+
+1.3 Project History
+
+            QueryHistoryParameters parameters = new QueryHistoryParameters(
+                "$/book", RecursionType.Full);
+            parameters.IncludeChanges = true;
+            IEnumerable<Changeset> history = vcs.QueryHistory(parameters);
+
+1.4 Changeset and Change
+            foreach (Changeset changeset in history)
+            {
+                Console.WriteLine(changeset.ChangesetId + "\t" + changeset.Committer + "\t" + changeset.Comment);
+                foreach (Change change in changeset.Changes)
+                {
+                    Console.WriteLine("\t" + change.Item.ItemId + "\t" + change.Item.ItemType + "\t" + change.Item.ServerItem);
+                }
+            }
+
+2. Connecting to TFS (Long)
+(http://msdn.microsoft.com/en-us/library/bb286958.aspx)
+(MSDN: Connect to Team Foundation Server from a Console Application)
+
+            Uri tfsUri = new Uri("https://ctrucza.visualstudio.com/");
+            TfsConfigurationServer configurationServer =
+                TfsConfigurationServerFactory.GetConfigurationServer(tfsUri);
+
+2.1 Project Collections
+
+            ReadOnlyCollection<CatalogNode> collectionNodes = configurationServer.CatalogNode.QueryChildren(
+                new[] { CatalogResourceTypes.ProjectCollection },
+                false, CatalogQueryOptions.None);
+
+2.2 Projects
+
+            foreach (CatalogNode collectionNode in collectionNodes)
+            {
+                // Use the InstanceId property to get the team project collection
+                Guid collectionId = new Guid(collectionNode.Resource.Properties["InstanceId"]);
+                TfsTeamProjectCollection teamProjectCollection = configurationServer.GetTeamProjectCollection(collectionId);
+
+                // Print the name of the team project collection
+                Console.WriteLine("Collection: " + teamProjectCollection.Name);
+
+                // Get a catalog of team projects for the collection
+                ReadOnlyCollection<CatalogNode> projectNodes = collectionNode.QueryChildren(
+                    new[] { CatalogResourceTypes.TeamProject },
+                    false, CatalogQueryOptions.None);
+
+                // List the team projects in the collection
+                foreach (CatalogNode projectNode in projectNodes)
+                {
+                    Console.WriteLine(" Team Project: " + projectNode.Resource.DisplayName);
+                }
+            }
