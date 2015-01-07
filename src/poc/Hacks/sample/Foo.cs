@@ -9,7 +9,7 @@
         public string stringProp { get; set; }
         public Bar barMethod() { return new Bar(); }
 
-        public Foo complextProp
+        public Foo complexProp
         {
             get
             {
@@ -21,9 +21,5 @@
                 var d = value;
             }
         }
-    }
-
-    public class Bar
-    {        
     }
 }
