@@ -31,6 +31,8 @@ namespace CountClasses
             {
                 Console.WriteLine(p);
                 stat = p.Accumulate(stat);
+
+                p.Inspect(solution);
             }
         }
 
