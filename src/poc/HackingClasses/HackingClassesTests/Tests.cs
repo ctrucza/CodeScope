@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Text;
 using NUnit.Framework;
 
 namespace HackingClassesTests
@@ -35,7 +36,7 @@ namespace HackingClassesTests
             Class c = new Class(classDeclarationSyntax);
             
             Assert.AreEqual("Foo", c.Name);
-            Assert.AreEqual(1, c.LOC);
+            Assert.AreEqual(14, c.LOC);
             Assert.AreEqual(2, c.Methods.Count());
         }
 
@@ -50,6 +51,21 @@ namespace HackingClassesTests
             Assert.AreEqual(name, c.Name);
         }
 
+        [TestCase("class Foo{}", 1)]
+        [TestCase(@"class Foo{
+            }", 2)]
+        [TestCase(@"
+            class Foo{
+            }", 3)]
+        public void test_class_loc_counted_correctly(string source, int lines)
+        {
+            var syntaxTree = Parse(source);
+            var classDeclaration = syntaxTree.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>().Single();
+            Class c = new Class(classDeclaration);
+
+            Assert.AreEqual(lines, c.LOC);
+        }
+
         private static SyntaxTree Parse(string source)
         {
             return CSharpSyntaxTree.ParseText(source);
@@ -59,16 +75,20 @@ namespace HackingClassesTests
     public class Class
     {
         private string name;
-        private List<Method> methods = new List<Method>();
+        private IEnumerable<Method> methods;
+        private int loc;
 
-        public Class(ClassDeclarationSyntax classDeclarationSyntax)
+        public Class(ClassDeclarationSyntax classDeclaration)
         {
-            name = classDeclarationSyntax.Identifier.ToString();
-            methods.AddRange(classDeclarationSyntax.DescendantNodes().OfType<MethodDeclarationSyntax>().Select(m=>new Method(m)));
+            name = classDeclaration.Identifier.ToString();
+            methods = classDeclaration.DescendantNodes().OfType<MethodDeclarationSyntax>().Select(
+                m=>new Method(m)
+                );
+            loc = classDeclaration.GetText().Lines.Count;
         }
 
         public string Name => name;
-        public int LOC => 1;
+        public int LOC => loc;
         public IEnumerable<Method> Methods => methods;
     }
 
