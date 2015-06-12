@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using HackingClasses;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
