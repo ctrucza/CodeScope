@@ -1,0 +1,11 @@
+﻿Count stuff in class:
+    LOC
+    methods
+        count
+        LOC of methods
+        private/public/protected methods
+    fields/properties
+        count
+        private/public/protected
+    
+- inner classes
