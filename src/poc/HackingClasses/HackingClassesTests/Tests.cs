@@ -39,6 +39,17 @@ namespace HackingClassesTests
             Assert.AreEqual(2, c.Methods.Count());
         }
 
+        [TestCase("class Foo{}", "Foo")]
+        [TestCase("class Bar{}", "Bar")]
+        public void test_class_name_extracted(string source, string name)
+        {
+            var syntaxTree = Parse(source);
+            var classDeclaration = syntaxTree.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>().Single();
+            Class c = new Class(classDeclaration);
+
+            Assert.AreEqual(name, c.Name);
+        }
+
         private static SyntaxTree Parse(string source)
         {
             return CSharpSyntaxTree.ParseText(source);
@@ -47,14 +58,16 @@ namespace HackingClassesTests
 
     public class Class
     {
+        private string name;
         private List<Method> methods = new List<Method>();
 
         public Class(ClassDeclarationSyntax classDeclarationSyntax)
         {
+            name = classDeclarationSyntax.Identifier.ToString();
             methods.AddRange(classDeclarationSyntax.DescendantNodes().OfType<MethodDeclarationSyntax>().Select(m=>new Method(m)));
         }
 
-        public string Name => "Foo";
+        public string Name => name;
         public int LOC => 1;
         public IEnumerable<Method> Methods => methods;
     }
