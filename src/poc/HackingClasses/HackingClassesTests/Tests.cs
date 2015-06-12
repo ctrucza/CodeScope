@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Text;
 using NUnit.Framework;
 
 namespace HackingClassesTests
@@ -17,7 +12,7 @@ namespace HackingClassesTests
         [Test]
         public void test_usage()
         {
-            var syntaxTree = Parse(@"
+            const string source = @"
             class Foo
             {
                 void Bar()
@@ -30,10 +25,8 @@ namespace HackingClassesTests
             
                 }
             }
-            ");
-            var classDeclarationSyntax = syntaxTree.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>().Single();
-
-            Class c = new Class(classDeclarationSyntax);
+            ";
+            Class c = GetClassFromSource(source);
             
             Assert.AreEqual("Foo", c.Name);
             Assert.AreEqual(14, c.LOC);
@@ -44,9 +37,7 @@ namespace HackingClassesTests
         [TestCase("class Bar{}", "Bar")]
         public void test_class_name_extracted(string source, string name)
         {
-            var syntaxTree = Parse(source);
-            var classDeclaration = syntaxTree.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>().Single();
-            Class c = new Class(classDeclaration);
+            Class c = GetClassFromSource(source);
 
             Assert.AreEqual(name, c.Name);
         }
@@ -59,42 +50,38 @@ namespace HackingClassesTests
             }", 3)]
         public void test_class_loc_counted_correctly(string source, int lines)
         {
-            var syntaxTree = Parse(source);
-            var classDeclaration = syntaxTree.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>().Single();
-            Class c = new Class(classDeclaration);
+            var c = GetClassFromSource(source);
 
             Assert.AreEqual(lines, c.LOC);
         }
 
-        private static SyntaxTree Parse(string source)
+        private static Class GetClassFromSource(string source)
         {
-            return CSharpSyntaxTree.ParseText(source);
+            var syntaxTree = CSharpSyntaxTree.ParseText(source);
+            var classDeclaration = syntaxTree.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>().Single();
+            return new Class(classDeclaration);
         }
     }
 
     public class Class
     {
-        private string name;
-        private IEnumerable<Method> methods;
-        private int loc;
+        public string Name { get; }
+        public int LOC { get; }
+        public IEnumerable<Method> Methods { get; }
 
         public Class(ClassDeclarationSyntax classDeclaration)
         {
-            name = classDeclaration.Identifier.ToString();
-            methods = classDeclaration.DescendantNodes().OfType<MethodDeclarationSyntax>().Select(
+            Name = classDeclaration.Identifier.ToString();
+            Methods = classDeclaration.DescendantNodes().OfType<MethodDeclarationSyntax>().Select(
                 m=>new Method(m)
                 );
-            loc = classDeclaration.GetText().Lines.Count;
+            LOC = classDeclaration.GetText().Lines.Count;
         }
-
-        public string Name => name;
-        public int LOC => loc;
-        public IEnumerable<Method> Methods => methods;
     }
 
     public class Method
     {
-        public Method(MethodDeclarationSyntax methodDeclarationSyntax)
+        public Method(MethodDeclarationSyntax methodDeclaration)
         {
         }
     }
