@@ -29,15 +29,13 @@ namespace HackingClassesTests
             Assert.AreEqual(name, c.Name);
         }
 
-        [TestCase("class Foo{}", 1)]
-        [TestCase(@"class Foo{
-            }", 2)]
-        [TestCase(@"
-            class Foo{
-            }", 3)]
-        public void loc_counted_correctly(string source, int lines)
+        [TestCase("loc_1.cs", 1)]
+        [TestCase("loc_2.cs", 2)]
+        [TestCase("loc_3.cs", 3)]
+        [TestCase("loc_4.cs", 4)]
+        public void loc_counted_correctly(string fileName, int lines)
         {
-            var c = GetSingleClassFromSource(source);
+            var c = GetSingleClassFromFile(fileName);
 
             Assert.AreEqual(lines, c.LOC);
         }
