@@ -16,11 +16,6 @@ namespace HackingClassesTests
             const string source = @"
             class Foo
             {
-                void Bar()
-                {
-            
-                }
-
                 void Baz()
                 {
             
@@ -30,8 +25,8 @@ namespace HackingClassesTests
             Class c = GetSingleClassFromSource(source);
             
             Assert.AreEqual("Foo", c.Name);
-            Assert.AreEqual(14, c.LOC);
-            Assert.AreEqual(2, c.Methods.Count());
+            Assert.AreEqual(9, c.LOC);
+            Assert.AreEqual(1, c.Methods.Count());
         }
 
         [TestCase("class Foo{}", "Foo")]
@@ -54,21 +49,6 @@ namespace HackingClassesTests
             var c = GetSingleClassFromSource(source);
 
             Assert.AreEqual(lines, c.LOC);
-        }
-
-        [TestCase("class Foo{} class Bar{}", 2)]
-        [TestCase("class Foo{} class Bar{} class Baz{}", 3)]
-        public void test_multiple_classes_found(string source, int classCount)
-        {
-            var classes = GetAllClassesFromSource(source);
-            Assert.AreEqual(classCount, classes.Count());
-        }
-
-        private IEnumerable<Class> GetAllClassesFromSource(string source)
-        {
-            var syntaxTree = CSharpSyntaxTree.ParseText(source);
-            var classDeclarations = syntaxTree.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>();
-            return classDeclarations.Select(c => new Class(c));
         }
 
         private static Class GetSingleClassFromSource(string source)
