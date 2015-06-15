@@ -26,7 +26,7 @@ namespace HackingClassesTests
                 }
             }
             ";
-            Class c = GetClassFromSource(source);
+            Class c = GetSingleClassFromSource(source);
             
             Assert.AreEqual("Foo", c.Name);
             Assert.AreEqual(14, c.LOC);
@@ -37,7 +37,7 @@ namespace HackingClassesTests
         [TestCase("class Bar{}", "Bar")]
         public void test_class_name_extracted(string source, string name)
         {
-            Class c = GetClassFromSource(source);
+            Class c = GetSingleClassFromSource(source);
 
             Assert.AreEqual(name, c.Name);
         }
@@ -50,12 +50,12 @@ namespace HackingClassesTests
             }", 3)]
         public void test_class_loc_counted_correctly(string source, int lines)
         {
-            var c = GetClassFromSource(source);
+            var c = GetSingleClassFromSource(source);
 
             Assert.AreEqual(lines, c.LOC);
         }
 
-        private static Class GetClassFromSource(string source)
+        private static Class GetSingleClassFromSource(string source)
         {
             var syntaxTree = CSharpSyntaxTree.ParseText(source);
             var classDeclaration = syntaxTree.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>().Single();
