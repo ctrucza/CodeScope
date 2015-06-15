@@ -101,7 +101,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tests.cs" />
+    <Compile Include="ClassTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

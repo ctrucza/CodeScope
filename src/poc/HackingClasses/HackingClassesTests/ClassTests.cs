@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace HackingClassesTests
 {
     [TestFixture]
-    public class Tests
+    public class ClassTests
     {
         [Test]
         public void test_usage()
