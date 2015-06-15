@@ -102,6 +102,8 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ClassTests.cs" />
+    <Compile Include="test_data\name_Bar.cs" />
+    <Compile Include="test_data\name_Baz.cs" />
     <Compile Include="test_data\usage.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -20,11 +20,11 @@ namespace HackingClassesTests
             Assert.AreEqual(1, c.Methods.Count());
         }
 
-        [TestCase("class Foo{}", "Foo")]
-        [TestCase("class Bar{}", "Bar")]
-        public void name_is_read_from_the_source(string source, string name)
+        [TestCase("name_Bar.cs", "Bar")]
+        [TestCase("name_Baz.cs", "Baz")]
+        public void name_is_read_from_the_source(string fileName, string name)
         {
-            Class c = GetSingleClassFromSource(source);
+            Class c = GetSingleClassFromFile(fileName);
 
             Assert.AreEqual(name, c.Name);
         }
