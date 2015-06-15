@@ -7,7 +7,7 @@
     <ProjectGuid>{94B83CEB-E2FD-4608-BBB0-557DEEED270B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>HackingClassesTest</RootNamespace>
+    <RootNamespace>HackingClassesTests</RootNamespace>
     <AssemblyName>HackingClassesTests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
