@@ -10,7 +10,7 @@ namespace HackingClassesTests
     public class ClassTests
     {
         [Test]
-        public void test_usage()
+        public void usage()
         {
             const string source = @"
             class Foo
@@ -30,7 +30,7 @@ namespace HackingClassesTests
 
         [TestCase("class Foo{}", "Foo")]
         [TestCase("class Bar{}", "Bar")]
-        public void test_class_name_extracted(string source, string name)
+        public void name_is_read_from_the_source(string source, string name)
         {
             Class c = GetSingleClassFromSource(source);
 
@@ -43,7 +43,7 @@ namespace HackingClassesTests
         [TestCase(@"
             class Foo{
             }", 3)]
-        public void test_class_loc_counted_correctly(string source, int lines)
+        public void loc_counted_correctly(string source, int lines)
         {
             var c = GetSingleClassFromSource(source);
 
