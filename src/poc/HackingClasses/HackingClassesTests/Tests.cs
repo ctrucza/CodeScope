@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using HackingClasses;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -53,6 +54,21 @@ namespace HackingClassesTests
             var c = GetSingleClassFromSource(source);
 
             Assert.AreEqual(lines, c.LOC);
+        }
+
+        [TestCase("class Foo{} class Bar{}", 2)]
+        [TestCase("class Foo{} class Bar{} class Baz{}", 3)]
+        public void test_multiple_classes_found(string source, int classCount)
+        {
+            var classes = GetAllClassesFromSource(source);
+            Assert.AreEqual(classCount, classes.Count());
+        }
+
+        private IEnumerable<Class> GetAllClassesFromSource(string source)
+        {
+            var syntaxTree = CSharpSyntaxTree.ParseText(source);
+            var classDeclarations = syntaxTree.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>();
+            return classDeclarations.Select(c => new Class(c));
         }
 
         private static Class GetSingleClassFromSource(string source)
