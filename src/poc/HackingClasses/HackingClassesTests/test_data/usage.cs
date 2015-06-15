@@ -1,0 +1,7 @@
+﻿class Foo
+{
+    void Baz()
+    {
+        
+    }
+}

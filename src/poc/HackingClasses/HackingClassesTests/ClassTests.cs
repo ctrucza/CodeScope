@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using HackingClasses;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -12,19 +13,10 @@ namespace HackingClassesTests
         [Test]
         public void usage()
         {
-            const string source = @"
-            class Foo
-            {
-                void Baz()
-                {
-            
-                }
-            }
-            ";
-            Class c = GetSingleClassFromSource(source);
+            Class c = GetSingleClassFromFile("usage.cs");
             
             Assert.AreEqual("Foo", c.Name);
-            Assert.AreEqual(9, c.LOC);
+            Assert.AreEqual(8, c.LOC);
             Assert.AreEqual(1, c.Methods.Count());
         }
 
@@ -48,6 +40,14 @@ namespace HackingClassesTests
             var c = GetSingleClassFromSource(source);
 
             Assert.AreEqual(lines, c.LOC);
+        }
+
+        private static Class GetSingleClassFromFile(string fileName)
+        {
+            string test_data_path = @"..\..\test_data";
+            var path = Path.Combine(test_data_path, fileName);
+            var source = File.ReadAllText(path);
+            return GetSingleClassFromSource(source);
         }
 
         private static Class GetSingleClassFromSource(string source)
