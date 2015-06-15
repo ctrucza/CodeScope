@@ -1,0 +1,3 @@
+﻿class Methods_0
+{
+}

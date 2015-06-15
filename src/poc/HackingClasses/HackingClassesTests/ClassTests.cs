@@ -40,6 +40,16 @@ namespace HackingClassesTests
             Assert.AreEqual(lines, c.LOC);
         }
 
+        [TestCase("methods_0.cs", 0)]
+        [TestCase("methods_1.cs", 1)]
+        [TestCase("methods_2.cs", 2)]
+        [TestCase("methods_3.cs", 3)]
+        public void method_count(string fileName, int methodCount)
+        {
+            var c = GetSingleClassFromFile(fileName);
+            Assert.AreEqual(methodCount, c.Methods.Count());
+        }
+
         private static Class GetSingleClassFromFile(string fileName)
         {
             string test_data_path = @"..\..\test_data";

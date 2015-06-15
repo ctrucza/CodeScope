@@ -106,6 +106,10 @@
     <Compile Include="test_data\loc_3.cs" />
     <Compile Include="test_data\loc_2.cs" />
     <Compile Include="test_data\loc_1.cs" />
+    <Compile Include="test_data\methods_0.cs" />
+    <Compile Include="test_data\methods_3.cs" />
+    <Compile Include="test_data\methods_2.cs" />
+    <Compile Include="test_data\methods_1.cs" />
     <Compile Include="test_data\name_Bar.cs" />
     <Compile Include="test_data\name_Baz.cs" />
     <Compile Include="test_data\usage.cs" />
